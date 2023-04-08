@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "ESNext", // Версия JavaScript, на которую будет транспилироваться код
+		"useDefineForClassFields": true, // Использовать синтаксис Class Fields
+		"module": "ESNext", // Формат модулей
+		"lib": ["ESNext", "DOM"], // Список стандартных библиотек, доступных в проекте
+		"moduleResolution": "Node", // Алгоритм разрешения модулей
+		"strict": true, // Строгий режим TypeScript
+		"sourceMap": true, // Генерировать sourcemap
+		"resolveJsonModule": true, // Разрешать импорт JSON-модулей
+		"isolatedModules": true, // Компилировать каждый файл в отдельном контексте
+		"esModuleInterop": true, // Разрешать импорты CommonJS-модулей с помощью ES-импортов
+		"noEmit": true, // Не генерировать файлы при компиляции
+		"noUnusedLocals": true, // Проверять на неиспользуемые переменные
+		"noUnusedParameters": true, // Проверять на неиспользуемые параметры функций
+		"noImplicitReturns": true, // Проверять на неявный возврат из функций
+		"skipLibCheck": true, // Пропускать проверку библиотечных файлов
+		"noImplicitAny": true // Проверять на неявный any
+	},
+	"include": ["src"] // Директории, которые должны быть включены в компиляцию
+}
