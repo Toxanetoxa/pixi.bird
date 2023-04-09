@@ -36,6 +36,7 @@ export interface Scene {
  * setChildIndex(child: DisplayObject, index: number): void: изменение индекса дочернего элемента в контейнере.
  * swapChildren(child: DisplayObject, child2: DisplayObject): void: обмен индексами двух дочерних элементов в контейнере.
  * swapChildrenAt(index1: number, index2: number): void: обмен индексами двух дочерних элементов в контейнере по их индексам.**/
+
 export abstract class Scene extends Container {
   abstract name: string;
 
