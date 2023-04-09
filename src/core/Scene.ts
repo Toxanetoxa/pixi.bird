@@ -2,10 +2,13 @@ import { Container } from "pixi.js";
 import type { SceneUtils } from "./SceneManager";
 
 export interface Scene {
-  load?(): void | Promise<void>;
-  unload?(): void | Promise<void>;
-  start?(): void | Promise<void>;
-  onResize?(width: number, height: number): void;
+	load?(): void | Promise<void>;
+
+	unload?(): void | Promise<void>;
+
+	start?(): void | Promise<void>;
+
+	onResize?(width: number, height: number): void;
 }
 
 /**
@@ -38,11 +41,11 @@ export interface Scene {
  * swapChildrenAt(index1: number, index2: number): void: обмен индексами двух дочерних элементов в контейнере по их индексам.**/
 
 export abstract class Scene extends Container {
-  abstract name: string;
+	abstract name: string;
 
-  constructor(protected utils: SceneUtils) {
-    super();
-  }
+	constructor(protected utils: SceneUtils) {
+		super();
+	}
 }
 
 export default Scene;
