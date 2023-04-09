@@ -163,6 +163,7 @@ export class Player extends Container {
     });
   }
 
+   /**изменяет состояние анимации объекта игрока и запускать соответствующую анимацию при помощи метода setState().**/
   setState(state: AnimState) {
     this.currentState = state;
 
@@ -203,24 +204,41 @@ export class Player extends Container {
     }
   }
 
+  /**
+   * геттер для jumping**/
+
   get jumping() {
     return this.state.jumping;
   }
 
+  /**приватный сеттер jumping, который устанавливает значение флага
+   * jumping в объекте state и вызывает метод updateAnimState()
+   * для обновления анимации объекта.**/
   private set jumping(value: boolean) {
     this.state.jumping = value;
     this.updateAnimState();
   }
 
+  /**
+   *приватный сеттер dashing, который устанавливает значение флага
+   *    * dashing в объекте state и вызывает метод updateAnimState()
+   *    * для обновления анимации объекта.
+   **/
   private set dashing(value: boolean) {
     this.state.dashing = value;
     this.updateAnimState();
   }
 
+  /**
+   * геттер для dashing **/
   get dashing() {
     return this.state.dashing;
   }
 
+
+  /**
+   * приватный метод устанавления состояния объекта бег, деш, прыжок, стоять
+   * **/
   private updateAnimState() {
     const { walk, jump, dash, idle } = Player.animStates;
 
@@ -256,6 +274,9 @@ export class Player extends Container {
     });
   }
 
+  /**
+   * ассинхронный метод бега
+   * **/
   async move(direction: Directions) {
     if (this.dashing) return;
 
@@ -271,6 +292,8 @@ export class Player extends Container {
     });
   }
 
+  /**
+   * асинхронный метод деша**/
   async dash() {
     if (this.state.velocity.x === 0) return;
 
@@ -290,6 +313,9 @@ export class Player extends Container {
     this.dashing = false;
   }
 
+  /**
+   * приватный метод определения стороы в которую смотрит персонаж
+   * **/
   private getDirection() {
     if (this.state.velocity.x === 0)
       return this.scale.x > 0 ? Directions.RIGHT : Directions.LEFT;
@@ -297,6 +323,9 @@ export class Player extends Container {
     return this.state.velocity.x > 0 ? Directions.RIGHT : Directions.LEFT;
   }
 
+  /**
+   * асинхронный метод прыжка
+   * **/
   async jump() {
     if (this.jumping) return;
 
