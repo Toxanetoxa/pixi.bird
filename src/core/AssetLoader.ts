@@ -25,14 +25,16 @@ export default class AssetLoader {
     this.manifest = this.generateManifest();
   }
 
-  // метод, который возвращает все пути к игровым ресурсам в папке public.
+  /**
+   * метод, который возвращает все пути к игровым ресурсам в папке public.**/
   importAssetFiles() {
     const assetFiles = import.meta.glob("/public/**/*.*");
 
     return Object.keys(assetFiles);
   }
 
-  // асинхронный метод, который загружает все игровые ресурсы, относящиеся к определённой группе, используя manifest.
+  /**
+   * асинхронный метод, который загружает все игровые ресурсы, относящиеся к определённой группе, используя manifest.**/
   async loadAssetsGroup(group: string) {
     const sceneAssets = this.manifest.filter((asset) => asset.group === group);
 
@@ -49,7 +51,9 @@ export default class AssetLoader {
     return resources;
   }
 
-  //  метод, который добавляет все спрайты из загруженных ресурсов типа Spritesheet в объект spritesheets.
+  /**
+   *  метод, который добавляет все спрайты из загруженных ресурсов типа Spritesheet в объект spritesheets.
+   *  **/
   prepareSpritesheets(resources: Record<string, Spritesheet>) {
     for (const [name, resource] of Object.entries(resources)) {
       if (!("animations" in resource)) continue;
@@ -58,7 +62,8 @@ export default class AssetLoader {
     }
   }
 
-  // метод, который генерирует массив игровых ресурсов manifest из путей к файлам игровых ресурсов.
+  /**
+   * метод, который генерирует массив игровых ресурсов manifest из путей к файлам игровых ресурсов.**/
   generateManifest() {
     const assetsManifest: Asset[] = [];
     const assetPathRegexp =

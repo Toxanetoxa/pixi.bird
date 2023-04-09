@@ -101,7 +101,7 @@ export class Player extends Container {
     decelerateDuration: 0.1,
     scale: 1,
     jump: {
-      height: 10,
+      height: 100,
       duration: 0.3,
       ease: "sine",
     },

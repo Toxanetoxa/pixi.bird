@@ -1,8 +1,18 @@
-import { utils } from "pixi.js";
+import { utils } from "pixi.js"; // импрот утилок из пикси
 
+/**
+ * объявляется класс который наследуется от класса EventEmitter и расширяем его,
+ * расширяем функционал клавитатуры на приложение
+ * **/
 export default class Keyboard extends utils.EventEmitter {
+  /**
+   * Определяется статическое свойство "instance", которое будет хранить единственный экземпляр класса "Keyboard".
+   * **/
   private static instance: Keyboard;
 
+  /**
+   * Определяются статические свойства "states", "actions", "actionKeyMap",
+   * "allKeys" и "keyActionMap", которые будут использоваться для удобства работы с клавишами и действиями.**/
   static states = {
     ACTION: "ACTION",
   };
@@ -17,23 +27,24 @@ export default class Keyboard extends utils.EventEmitter {
   } as const;
 
   static actionKeyMap = {
-    [Keyboard.actions.UP]: "KeyW",
-    [Keyboard.actions.DOWN]: "KeyS",
-    [Keyboard.actions.LEFT]: "KeyA",
-    [Keyboard.actions.RIGHT]: "KeyD",
-    [Keyboard.actions.JUMP]: "Space",
-    [Keyboard.actions.SHIFT]: "ShiftLeft",
+    [Keyboard.actions.UP]: ["KeyW"],
+    [Keyboard.actions.DOWN]: ["KeyS"],
+    [Keyboard.actions.LEFT]: ["KeyA", "ArrowLeft"],
+    [Keyboard.actions.RIGHT]: ["KeyD", "ArrowRight"],
+    [Keyboard.actions.JUMP]: ["Space", "ArrowUp"],
+    [Keyboard.actions.SHIFT]: ["ShiftLeft", "KeyF"],
   } as const;
 
-  static allKeys = Object.values(Keyboard.actionKeyMap);
+  static allKeys = Object.values(Keyboard.actionKeyMap).flat();
 
   static keyActionMap = Object.entries(Keyboard.actionKeyMap).reduce(
-    (acc, [key, action]) => {
-      acc[action] = key as keyof typeof Keyboard.actions;
-
-      return acc;
-    },
-    {} as Record<string, keyof typeof Keyboard.actionKeyMap>
+      (acc, [key, actions]) => {
+        actions.forEach((action) => {
+          acc[action] = key as keyof typeof Keyboard.actions;
+        });
+        return acc;
+      },
+      {} as Record<string, keyof typeof Keyboard.actions>
   );
 
   private keyMap = new Map<string, boolean>();
@@ -58,14 +69,16 @@ export default class Keyboard extends utils.EventEmitter {
   }
 
   public getAction(action: keyof typeof Keyboard.actions): boolean {
-    return this.isKeyDown(Keyboard.actionKeyMap[action]);
+    const keys = Keyboard.actionKeyMap[action];
+    return keys.some((key) => this.isKeyDown(key));
   }
 
+
   public onAction(
-    callback: (e: {
-      action: keyof typeof Keyboard.actions;
-      buttonState: "pressed" | "released";
-    }) => void
+      callback: (e: {
+        action: keyof typeof Keyboard.actions;
+        buttonState: "pressed" | "released";
+      }) => void
   ): void {
     this.on(Keyboard.states.ACTION, callback);
   }
@@ -82,7 +95,7 @@ export default class Keyboard extends utils.EventEmitter {
   }
 
   private onKeyRelease(key: string): void {
-    if (!(key in Keyboard.keyActionMap)) return;
+    if (!this.isKeyDown(key) || !(key in Keyboard.keyActionMap)) return;
 
     this.keyMap.set(key, false);
 
@@ -93,6 +106,6 @@ export default class Keyboard extends utils.EventEmitter {
   }
 
   public isKeyDown(key: string): boolean {
-    return this.keyMap.get(key) ?? false;
+    return this.keyMap.get(key) || false;
   }
 }
