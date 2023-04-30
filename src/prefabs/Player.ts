@@ -40,8 +40,9 @@ export class Player extends Container {
 	 * элементов перечисления AnimState, либо null, если текущее состояние анимации неизвестно или не задано.
 	 * **/
 	currentState: AnimState | null = null;
-
-	/**свойство animStates, которое представляет объект типа Record<string, AnimState>.**/
+	/**
+	 * свойство animStates, которое представляет объект типа Record<string, AnimState>.
+	 * **/
 
 	static animStates: Record<string, AnimState> = {
 		/**
@@ -65,8 +66,22 @@ export class Player extends Container {
 		jump: {
 			anim: "jump",
 			soundName: "jump2",
+			// soundName: "fly",
 			loop: false,
 			speed: 0.5,
+		},
+		/**
+		 * fly - объект, который описывает анимацию в состоянии полёта (fly).
+		 * Объект содержит свойства anim (название анимации),
+		 * soundName (название звукового эффекта, который должен проигрываться вместе с анимацией),
+		 * loop (флаг, указывающий, что анимация не должна повторяться в цикле)
+		 * speed (скорость проигрывания анимации).
+		 * **/
+		fly: {
+			anim: "jump",
+			soundName: "fly",
+			loop: false,
+			speed: 0.3,
 		},
 		/**
 		 * walk - объект, который описывает анимацию в состоянии ходьбы (walk).
@@ -100,7 +115,7 @@ export class Player extends Container {
 		decelerateDuration: 0.1,
 		scale: 1,
 		jump: {
-			height: 100,
+			height: 300,
 			duration: 0.3,
 			ease: "sine",
 		},
@@ -108,11 +123,17 @@ export class Player extends Container {
 			speedMultiplier: 6,
 			duration: 0.1,
 		},
+		fly: {
+			height: 100,
+			duration: 0.3,
+			ease: "sine",
+		},
 	};
 
 	state = {
 		jumping: false,
 		dashing: false,
+		flying: false,
 		velocity: {
 			x: 0,
 			y: 0,
@@ -150,7 +171,8 @@ export class Player extends Container {
 		 * устанавливается начальное состояние анимации объекта с помощью метода setState(),
 		 * передавая ему значение Player.animStates.idle, которое указывает на состояние покоя;
 		 * **/
-		this.setState(Player.animStates.idle);
+		// this.setState(Player.animStates.idle);
+		this.setState(Player.animStates.fly);
 
 		/**
 		 * устанавливается обработчик событий клавиатуры через метод onAction(), который вызывает методы onActionPress() и
@@ -182,7 +204,9 @@ export class Player extends Container {
 			case "SHIFT":
 				this.dash();
 				break;
-
+			case "UP":
+				this.fly();
+				break;
 			default:
 				break;
 		}
@@ -208,6 +232,14 @@ export class Player extends Container {
 
 	get jumping() {
 		return this.state.jumping;
+	}
+
+	/**
+	 * геттер для полёта
+	 * **/
+
+	get flying() {
+		return this.state.flying;
 	}
 
 	/**приватный сеттер jumping, который устанавливает значение флага
@@ -238,7 +270,7 @@ export class Player extends Container {
 	 * приватный метод устанавления состояния объекта бег, деш, прыжок, стоять
 	 * **/
 	private updateAnimState() {
-		const { walk, jump, dash, idle } = Player.animStates;
+		const { walk, jump, dash, idle, fly } = Player.animStates;
 
 		if (this.dashing) {
 			if (this.currentState === dash) return;
@@ -252,6 +284,10 @@ export class Player extends Container {
 			if (this.currentState === walk) return;
 
 			this.setState(walk);
+		} else if (this.flying) {
+			if (this.currentState === fly) return;
+
+			this.setState(fly);
 		} else {
 			if (this.currentState === idle) return;
 
@@ -341,5 +377,20 @@ export class Player extends Container {
 		});
 
 		this.jumping = false;
+	}
+
+	async fly() {
+		if (this.flying) return;
+
+		const { height, duration, ease } = this.config.fly;
+
+		await gsap.to(this, {
+			duration,
+			y: `-=${height}`,
+			ease: `${ease}.out`,
+			yoyo: true,
+			yoyoEase: `${ease}.in`,
+			repeat: 1,
+		});
 	}
 }
