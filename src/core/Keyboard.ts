@@ -27,11 +27,11 @@ export default class Keyboard extends utils.EventEmitter {
 	} as const;
 
 	static actionKeyMap = {
-		[Keyboard.actions.UP]: ["KeyW"],
-		[Keyboard.actions.DOWN]: ["KeyS"],
+		[Keyboard.actions.UP]: ["KeyW", "ArrowUp"],
+		[Keyboard.actions.DOWN]: ["KeyS", "ArrowDown"],
 		[Keyboard.actions.LEFT]: ["KeyA", "ArrowLeft"],
 		[Keyboard.actions.RIGHT]: ["KeyD", "ArrowRight"],
-		[Keyboard.actions.JUMP]: ["Space", "ArrowUp"],
+		[Keyboard.actions.JUMP]: ["Space"],
 		[Keyboard.actions.SHIFT]: ["ShiftLeft", "KeyF"],
 	} as const;
 
