@@ -215,7 +215,7 @@ export class Player extends Container {
 			// 	this.move(Directions.LEFT);
 			// 	break;
 			case "RIGHT":
-				this.move(Directions.RIGHT);
+				this.move();
 				break;
 			case "JUMP":
 				this.jump();
@@ -357,18 +357,22 @@ export class Player extends Container {
 	/**
 	 * ассинхронный метод бега
 	 * **/
-	async move(direction: Directions) {
+	// async move(direction: Directions) {
+	async move() {
 		if (this.dashing) return;
 
 		this.decelerationTween?.progress(1);
 
-		this.state.velocity.x = direction * this.config.speed;
+		this.state.velocity.x = this.config.speed;
 
 		this.updateAnimState();
 
 		gsap.to(this.scale, {
 			duration: this.config.turnDuration,
-			x: this.config.scale * direction,
+			x: this.config.scale,
+			yoyo: true,
+			yoyoEase: `sine.in`,
+			repeat: 1,
 		});
 	}
 
@@ -444,8 +448,6 @@ export class Player extends Container {
 
 	async fall() {
 		// if (this.falling) return;
-
-		console.log(this.state.velocity);
 
 		const { height, duration, ease } = this.config.fly;
 
