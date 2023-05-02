@@ -12,7 +12,7 @@ export default class Loading extends Scene {
 	async load() {
 		await this.utils.assetLoader.loadAssetsGroup("Loading");
 
-		const bg = Sprite.from("bgNight");
+		const bg = Sprite.from("bgCity");
 
 		const text = new Text("Loading...", {
 			fontFamily: "Verdana",

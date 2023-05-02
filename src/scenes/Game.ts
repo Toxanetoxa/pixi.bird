@@ -16,7 +16,7 @@ export default class Game extends Scene {
 	 * оздается экземпляр класса ParallaxBackground для работы с параллакс-фоном и экземпляр класса Player для работы с игроком.
 	 * **/
 	load() {
-		this.background = new ParallaxBackground(config.backgrounds.forest);
+		this.background = new ParallaxBackground(config.background.city);
 		this.player = new Player();
 
 		this.player.x = window.innerWidth / 2;
